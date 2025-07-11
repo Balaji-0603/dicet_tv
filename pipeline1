@@ -1,0 +1,21 @@
+pipeline {
+    agent {label 'dev'}
+ tools { maven 'maven'}
+       stages {
+        stage('Git') {
+            steps {
+                git 'https://github.com/Balaji-0603/dicet_tv.git'
+            }
+        }
+        stage ('maven') {
+              steps { 
+              sh 'mvn clean package'
+       }
+     }
+    stage ('deploy'){
+        steps{
+            deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcat', path: '', url: 'http://18.212.210.141:8080/')], contextPath: 'tv', war: '**/*.war'
+          }  
+        }
+      }    
+    }
